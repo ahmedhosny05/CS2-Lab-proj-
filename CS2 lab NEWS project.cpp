@@ -6,7 +6,8 @@
 using namespace std;
 
 
-struct Article {
+struct Article
+{
     string title;
     string description;
     string date;
@@ -197,7 +198,8 @@ int main() {
         string choice;
         cin >> choice;
 
-        if (choice == "yes") {
+        if (choice == "yes")
+        {
             // Prompt for username and password for signup
             cout << "Enter new username: ";
             string newUsername, newPassword;
