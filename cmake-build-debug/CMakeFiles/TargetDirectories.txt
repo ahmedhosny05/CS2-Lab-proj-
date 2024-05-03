@@ -1,0 +1,3 @@
+/Users/kamalelnazir/Documents/GitHub/cmake-build-debug/CMakeFiles/GitHub.dir
+/Users/kamalelnazir/Documents/GitHub/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/kamalelnazir/Documents/GitHub/cmake-build-debug/CMakeFiles/rebuild_cache.dir

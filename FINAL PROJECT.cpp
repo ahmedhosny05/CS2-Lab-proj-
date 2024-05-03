@@ -46,6 +46,9 @@ public:
         }
         return false;
     }
+    const vector<Article>& getArticles() const {
+        return articles;
+    }
     void adminSignup(const string& username, const string& password) {
        
         if (adminCredentials.find(username) != adminCredentials.end()) {
@@ -308,9 +311,288 @@ void rateNewsArticle(const string& username, const string& articleTitle, int rat
         cout << "Article with title \"" << articleTitle << "\" not found.\n";
     }
 }
-}; 
+};
 
+int main() {
+    NewsPortal newsPortal;
+    string newusername, newpassword;
+    const vector<Article>& articless = newsPortal.getArticles();
+    while (true) {
+        cout << "Welcome to the News Portal!\n";
+        cout << "1. Admin Login\n";
+        cout << "2. Admin Sign Up\n";
+        cout << "3. User Registration\n";
+        cout << "4. User Login\n";
+        cout << "5. Exit\n";
+        cout << "Enter your choice: ";
 
+        int mainChoice;
+        cin >> mainChoice;
+
+        switch (mainChoice) {
+            case 1: {
+                cout << "Admin Login\n";
+                string adminUsername, adminPassword;
+                cout << "Enter username (or 'exit' to go back to main menu): ";
+                cin >> adminUsername;
+
+                if (adminUsername == "exit") {
+                    break;
+                }
+
+                cout << "Enter password: ";
+                cin >> adminPassword;
+
+                if (newsPortal.adminLogin(adminUsername, adminPassword)) {
+                    cout << "Admin login successful!\n";
+
+                    while (true) {
+                        cout << "\nAdmin Menu:\n";
+                        cout << "1. Create and publish news article\n";
+                        cout << "2. Edit news article\n";
+                        cout << "3. Delete news article\n";
+                        cout << "4. Add new category\n";
+                        cout << "5. Display average rating for an article\n";
+                        cout << "6. Save admin credentials to file\n";
+                        cout << "7. Logout\n";
+                        cout << "Enter your choice: ";
+
+                        int adminChoice;
+                        cin >> adminChoice;
+
+                        switch (adminChoice) {
+                            case 1: {
+                                string title, description, date, category;
+                                int rating;
+
+                                cout << "Enter article title: ";
+                                cin >> title;
+
+                                cout << "Enter article description: ";
+                                cin >> description;
+
+                                cout << "Enter article date: ";
+                                cin >> date;
+
+                                cout << "Enter article rating: ";
+                                cin >> rating;
+
+                                cout << "Enter article category: ";
+                                cin >> category;
+
+                                Article newArticle = {title, description, date, rating, category};
+                                newsPortal.createArticle(newArticle);
+                                cout << "Article published successfully!\n";
+                                break;
+                            }
+                            case 2: {
+                                int index;
+                                cout << "Enter article index to edit: ";
+                                cin >> index;
+
+                                if (index >= 0 ) {
+                                    string newTitle, newDescription, newDate, newCategory;
+                                    int newRating;
+
+                                    cout << "Enter new article title: ";
+                                    cin >> newTitle;
+
+                                    cout << "Enter new article description: ";
+                                    cin >> newDescription;
+
+                                    cout << "Enter new article date: ";
+                                    cin >> newDate;
+
+                                    cout << "Enter new article rating: ";
+                                    cin >> newRating;
+
+                                    cout << "Enter new article category: ";
+                                    cin >> newCategory;
+
+                                    Article updatedArticle = {newTitle, newDescription, newDate, newRating, newCategory};
+                                    newsPortal.editArticle(index, updatedArticle);
+                                    cout << "Article edited successfully!\n";
+                                } else {
+                                    cout << "Invalid article index.\n";
+                                }
+                                break;
+                            }
+                            case 3: {
+                                int index;
+                                cout << "Enter article index to delete: ";
+                                cin >> index;
+
+                                if (index >= 0) {
+                                    newsPortal.deleteArticle(index);
+                                    cout << "Article deleted successfully!\n";
+                                } else {
+                                    cout << "Invalid article index.\n";
+                                }
+                                break;
+                            }
+                            case 4: {
+                                string newCategory;
+                                cout << "Enter new category name: ";
+                                cin >> newCategory;
+                                newsPortal.addNewCategory(newCategory);
+                                break;
+                            }
+                            case 5: {
+                                string articleTitle;
+                                cout << "Enter article title to get average rating: ";
+                                cin >> articleTitle;
+                                double avgRating = newsPortal.getaveragerating(articleTitle);
+                                if (avgRating > 0) {
+                                    cout << "Average rating for article \"" << articleTitle << "\": " << avgRating << endl;
+                                } else {
+                                    cout << "Article \"" << articleTitle << "\" not found or has no ratings.\n";
+                                }
+                                break;
+                            }
+                            case 6: {
+                                string filename;
+                                cout << "Enter filename to save admin credentials: ";
+                                cin >> filename;
+                                if (newsPortal.saveAdminCredentialsToFile(filename)) {
+                                    cout << "Admin credentials saved to file successfully!\n";
+                                } else {
+                                    cout << "Failed to save admin credentials to file.\n";
+                                }
+                                break;
+                            }
+                            case 7: {
+                                cout << "Logging out...\n";
+                                break;
+                            }
+                            default:
+                                cout << "Invalid choice. Please try again.\n";
+                        }
+
+                        if (adminChoice == 7) {
+                            break;
+                        }
+                    }
+                } else {
+                    cout << "Admin login failed. Please try again or type 'exit' to go back.\n";
+                }
+
+                break;
+            }
+            case 2: {
+                cout << "Admin Sign Up\n";
+                cout << "Enter new username: ";
+                cin >> newusername;
+                cout << "Enter new password: ";
+                cin >> newpassword;
+                newsPortal.adminSignup(newusername, newpassword);
+                break;
+            }
+            case 3: {
+                string username, password;
+                cout << "User Registration\n";
+                cout << "Enter username: ";
+                cin >> username;
+                cout << "Enter password: ";
+                cin >> password;
+                newsPortal.userRegistration(username, password, false);
+                break;
+            }
+            case 4: {
+                cout << "User Login\n";
+                string username, password;
+                cout << "Enter username (or 'exit' to go back to main menu): ";
+                cin >> username;
+
+                if (username == "exit") {
+                    break;
+                }
+
+                cout << "Enter password: ";
+                cin >> password;
+
+                if (newsPortal.userLogin(username, password)) {
+                    cout << "User login successful!\n";
+
+                    while (true) {
+                        cout << "\nUser Menu:\n";
+                        cout << "1. Search for news articles\n";
+                        cout << "2. View latest news articles\n";
+                        cout << "3. View news articles by category\n";
+                        cout << "4. Rate a news article\n";
+                        cout << "5. Logout\n";
+                        cout << "Enter your choice: ";
+
+                        int userChoice;
+                        cin >> userChoice;
+
+                        switch (userChoice) {
+                            case 1: {
+                                string keyword;
+                                cout << "Enter search keyword: ";
+                                cin >> keyword;
+                                newsPortal.searchNews(keyword);
+                                break;
+                            }
+                            case 2: {
+                                newsPortal.displayLatestNews();
+                                break;
+                            }
+                            case 3: {
+                                string category;
+                                cout << "Enter category to view news articles: ";
+                                cin >> category;
+                                newsPortal.viewNewsByCategory(category);
+                                break;
+                            }
+                            case 4: {
+                                string articleTitle;
+                                int rating;
+                                cout << "Enter article title to rate: ";
+                                cin >> articleTitle;
+
+                                if (newsPortal.findArticleByTitle(articleTitle) != articless.end()) {
+                                    cout << "Enter rating (1-5): ";
+                                    cin >> rating;
+                                    if (rating >= 1 && rating <= 5) {
+                                        newsPortal.rateNewsArticle(username, articleTitle, rating);
+                                        cout << "Article rated successfully!\n";
+                                    } else {
+                                        cout << "Invalid rating. Please enter a number between 1 and 5.\n";
+                                    }
+                                } else {
+                                    cout << "Article not found.\n";
+                                }
+                                break;
+                            }
+                            case 5: {
+                                cout << "Logging out...\n";
+                                break;
+                            }
+                            default:
+                                cout << "Invalid choice. Please try again.\n";
+                        }
+
+                        if (userChoice == 5) {
+                            break;
+                        }
+                    }
+                } else {
+                    cout << "User login failed. Please try again or type 'exit' to go back.\n";
+                }
+
+                break;
+            }
+            case 5: {
+                cout << "Exiting...\n";
+                return 0;
+            }
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
 /*int main()
 {
     NewsPortal newsPortal;
