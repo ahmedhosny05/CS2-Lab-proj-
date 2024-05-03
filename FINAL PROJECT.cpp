@@ -120,7 +120,7 @@ public:
         }
     }
 
-    void saveArticlesToFile(const string& filename) {
+    bool saveArticlesToFile(const string& filename) {
         ofstream file(filename);
         if (file.is_open()) {
             for (const auto& article : articles) {
@@ -132,13 +132,15 @@ public:
                 file << "=====" << endl;
             }
             file.close();
+            return true;
         }
         else {
             cout << "Error: Unable to open file for writing." << endl;
+            return false;
         }
     }
 
-    void loadArticlesFromFile(const string& filename) {
+    bool loadArticlesFromFile(const string& filename) {
         ifstream file(filename);
         if (file.is_open()) {
             articles.clear();
@@ -174,12 +176,46 @@ public:
             }
 
             file.close();
+            return true;
         }
         else {
             cout << "Error: Unable to open file '" << filename << "' for reading." << endl;
+            return false;
+        }
+    }
+    bool loadUserCredentials(const string& filename) {
+        ifstream file(filename);
+        if (file.is_open()) {
+            userCredentials.clear();
+            string username, password;
+            while (file >> username >> password) {
+                userCredentials[username] = password;
+            }
+            file.close();
+            return true;
+        }
+        else {
+            cout << "Error: Unable to open file for reading." << endl;
+            return false;
         }
     }
 
+    bool saveUserCredentials(const string& filename) {
+        ifstream file(filename);
+        if (file.is_open()) {
+            userCredentials.clear();
+            string username, password;
+            while (file >> username >> password) {
+                userCredentials[username] = password;
+            }
+            file.close();
+            return true;
+        }
+        else {
+            cout << "Error: Unable to open file for reading." << endl;
+            return false;
+        }
+    }
 
     double getaveragerating(const  string& title)
     {
@@ -324,6 +360,8 @@ int main() {
     string newusername, newpassword;
     const vector<Article>& articless = newsPortal.getArticles();
     newsPortal.loadAdminCredentialsFromFile("admin_credentials.txt");
+    newsPortal.loadArticlesFromFile("article_credentials.txt");
+    newsPortal.loadUserCredentials("user_credentials.txt");
     while (true) {
         cout << "Welcome to the News Portal!\n";
         cout << "1. Admin Login\n";
@@ -361,7 +399,8 @@ int main() {
                     cout << "4. Add new category\n";
                     cout << "5. Display average rating for an article\n";
                     cout << "6. Save admin credentials to file\n";
-                    cout << "7. Logout\n";
+                    cout << "7. Save article credentials to file\n";
+                    cout << "8. Logout\n";
                     cout << "Enter your choice: ";
 
                     int adminChoice;
@@ -469,6 +508,11 @@ int main() {
                         break;
                     }
                     case 7: {
+                        if (newsPortal.saveArticlesToFile("article_credentials.txt")) cout << "Article credentials saved succesfully";
+                        else cout << "Failed to save Article credentials to file";
+                        break;
+                    }
+                    case 8: {
                         cout << "Logging out...\n";
                         break;
                     }
@@ -476,7 +520,7 @@ int main() {
                         cout << "Invalid choice. Please try again.\n";
                     }
 
-                    if (adminChoice == 7) {
+                    if (adminChoice == 8) {
                         break;
                     }
                 }
@@ -528,7 +572,8 @@ int main() {
                     cout << "2. View latest news articles\n";
                     cout << "3. View news articles by category\n";
                     cout << "4. Rate a news article\n";
-                    cout << "5. Logout\n";
+                    cout << "5. Save User credentials to file\n";
+                    cout << "6. Logout\n";
                     cout << "Enter your choice: ";
 
                     int userChoice;
@@ -573,9 +618,15 @@ int main() {
                         else {
                             cout << "Article not found.\n";
                         }
+                        newsPortal.saveArticlesToFile("article_credentials.txt");
                         break;
                     }
                     case 5: {
+                        if (newsPortal.saveUserCredentials("user_credentials.txt")) cout << "user credentials saved succesfully";
+                        else cout << "Failed to save user credentials to file";
+                        break;
+                    }
+                    case 6: {
                         cout << "Logging out...\n";
                         break;
                     }
@@ -583,7 +634,7 @@ int main() {
                         cout << "Invalid choice. Please try again.\n";
                     }
 
-                    if (userChoice == 5) {
+                    if (userChoice == 6) {
                         break;
                     }
                 }
