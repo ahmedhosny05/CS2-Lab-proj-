@@ -5,8 +5,9 @@
 using namespace std;
 
 
-struct Article
+class Article
 {
+public:
     string title;
     string description;
     string date;
