@@ -4,6 +4,9 @@
 #include <sstream>
 #include "Admin.h"
 #include "user.h"
+#include "fstream"
+#include "string"
+using namespace std;
 Login::Login(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Login)
@@ -20,20 +23,22 @@ void Login::on_OnLoginButton_clicked()
 {
     loadAdminCredentialsFromFile("admin_credentials");
     loadUserCredentials("user_credentials");
-    QString passwordss = ui->passwordlabel->text();
-    QString usernamess = ui->usernamelabel->text();
+    QString passwordss = ui->PasswordlineEdit->text();
+    QString usernamess = ui->UsernameLineEdit->text();
     bool found = adminLogin(usernamess,passwordss);
     bool founduser = userLogin(usernamess,passwordss);
     if (!found && !founduser) {
         ui->errorlabel->setVisible(true);
     }
     if (found&&!founduser) {
-        Admin *admin = new Admin();
+        Admin *admin = new Admin(this);
         admin->show();
+        hide();
     }
     if (founduser&&!found || found && founduser) {
         User* user = new User();
         user->show();
+        hide();
     }
 }
 
@@ -45,7 +50,7 @@ bool Login::adminLogin(const QString& username, const QString& password)
     }
     return false;
 }
-bool Login::userLogin(const string& username, const string& password) {
+bool Login::userLogin(const QString& username, const QString& password) {
     auto it = userCredentials.find(username);
     if (it != userCredentials.end() && it->second == password) {
         return true;
@@ -54,11 +59,12 @@ bool Login::userLogin(const string& username, const string& password) {
         return false;
     }
 }
-bool Login::saveAdminCredentialsToFile(const string& filename) {
-    ofstream file(filename);
+bool Login::saveAdminCredentialsToFile(const QString& filename) {
+    string filenameStd = filename.toStdString();
+    ofstream file(filenameStd);
     if (file.is_open()) {
         for (const auto& pair : adminCredentials) {
-            file << pair.first << " " << pair.second << endl;
+            file << pair.first.toStdString() << " " << pair.second.toStdString() << endl;
         }
         file.close();
         return true;
@@ -68,13 +74,14 @@ bool Login::saveAdminCredentialsToFile(const string& filename) {
     }
 }
 
-bool Login::loadAdminCredentialsFromFile(const string& filename) {
-    ifstream file(filename);
+bool Login::loadAdminCredentialsFromFile(const QString& filename) {
+    string filenameStd = filename.toStdString();
+    ifstream file(filenameStd);
     if (file.is_open()) {
         adminCredentials.clear();
         string username, password;
         while (file >> username >> password) {
-            adminCredentials[username] = password;
+            adminCredentials.insert(make_pair(QString::fromStdString(username), QString::fromStdString(password)));
         }
         file.close();
         return true;
@@ -84,15 +91,16 @@ bool Login::loadAdminCredentialsFromFile(const string& filename) {
     }
 }
 
-bool Login::saveArticlesToFile(const string& filename) {
-    ofstream file(filename);
+bool Login::saveArticlesToFile(const QString& filename) {
+    string filenameStd = filename.toStdString();
+    ofstream file(filenameStd);
     if (file.is_open()) {
         for (const auto& article : articles) {
-            file << article.title << endl;
-            file << article.description << endl;
-            file << article.date << endl;
+            file << article.title.toStdString() << endl;
+            file << article.description.toStdString() << endl;
+            file << article.date.toStdString() << endl;
             file << article.rating << endl;
-            file << article.category << endl;
+            file << article.category.toStdString() << endl;
             file << "=====" << endl;
         }
         file.close();
@@ -103,8 +111,9 @@ bool Login::saveArticlesToFile(const string& filename) {
     }
 }
 
-bool Login::loadArticlesFromFile(const string& filename) {
-    ifstream file(filename);
+bool Login::loadArticlesFromFile(const QString& filename) {
+    string filenameStd = filename.toStdString();
+    ifstream file(filenameStd);
     if (file.is_open()) {
         articles.clear();
         string line;
@@ -120,20 +129,20 @@ bool Login::loadArticlesFromFile(const string& filename) {
                 article = Article();
             }
             else {
-                if (article.title.empty()) {
-                    article.title = line;
+                if (article.title.isEmpty()) {
+                    article.title.toStdString() = line;
                 }
-                else if (article.description.empty()) {
-                    article.description = line;
+                else if (article.description.isEmpty()) {
+                    article.description.toStdString() = line;
                 }
-                else if (article.date.empty()) {
-                    article.date = line;
+                else if (article.date.isEmpty()) {
+                    article.date.toStdString() = line;
                 }
                 else if (article.rating == 0) {
                     article.rating = stoi(line);
                 }
-                else if (article.category.empty()) {
-                    article.category = line;
+                else if (article.category.isEmpty()) {
+                    article.category.toStdString() = line;
                 }
             }
         }
@@ -145,13 +154,14 @@ bool Login::loadArticlesFromFile(const string& filename) {
         return false;
     }
 }
-bool Login::loadUserCredentials(const string& filename) {
-    ifstream file(filename);
+bool Login::loadUserCredentials(const QString& filename) {
+    string filenameStd = filename.toStdString();
+    ifstream file(filenameStd);
     if (file.is_open()) {
         userCredentials.clear();
         string username, password;
         while (file >> username >> password) {
-            userCredentials[username] = password;
+            userCredentials.insert(make_pair(QString::fromStdString(username), QString::fromStdString(password)));
         }
         file.close();
         return true;
@@ -161,13 +171,13 @@ bool Login::loadUserCredentials(const string& filename) {
     }
 }
 
-bool Login::saveUserCredentials(const string& filename) {
-    ifstream file(filename);
+bool Login::saveUserCredentials(const QString& filename) {
+    string filenameStd = filename.toStdString();
+    ifstream file(filenameStd);
     if (file.is_open()) {
         userCredentials.clear();
-        string username, password;
-        while (file >> username >> password) {
-            userCredentials[username] = password;
+        for (const auto& pairs : userCredentials) {
+            file << pairs.first.toStdString() << " " << pairs.second.toStdString() << endl;
         }
         file.close();
         return true;

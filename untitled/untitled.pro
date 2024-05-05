@@ -10,6 +10,9 @@ CONFIG += c++17
 
 SOURCES += \
     admin.cpp \
+    article.cpp \
+    createarticle.cpp \
+    editarticle.cpp \
     login.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -18,6 +21,9 @@ SOURCES += \
 
 HEADERS += \
     admin.h \
+    article.h \
+    createarticle.h \
+    editarticle.h \
     login.h \
     mainwindow.h \
     register.h \
@@ -25,6 +31,8 @@ HEADERS += \
 
 FORMS += \
     admin.ui \
+    createarticle.ui \
+    editarticle.ui \
     login.ui \
     mainwindow.ui \
     register.ui \

@@ -55,7 +55,7 @@
   <widget class="QPushButton" name="AddNewCategoryButton">
    <property name="geometry">
     <rect>
-     <x>10</x>
+     <x>130</x>
      <y>130</y>
      <width>131</width>
      <height>32</height>
@@ -181,6 +181,29 @@
     <rect>
      <x>200</x>
      <y>250</y>
+     <width>58</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="AddCategorylineEdit">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>140</y>
+     <width>113</width>
+     <height>21</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="AddCategoryUpdate">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>140</y>
      <width>58</width>
      <height>16</height>
     </rect>
