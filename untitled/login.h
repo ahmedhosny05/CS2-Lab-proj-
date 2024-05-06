@@ -8,6 +8,7 @@
 #include "qstring.h"
 #include "article.h"
 #include "user.h"
+#include "users.h"
 using namespace std;
 namespace Ui {
 class Login;
@@ -26,7 +27,7 @@ public:
     map<QString, vector<Article>> categoryMap;
 
     map<QString, QString> userCredentials; // Store user credentials
-    vector<User> users;
+    vector<Users> users;
     explicit Login(QWidget *parent = nullptr);
     ~Login();
     bool adminLogin(const QString& username, const QString& password);
@@ -39,6 +40,8 @@ public:
     bool saveUserCredentials(const QString& filename);
 private slots:
     void on_OnLoginButton_clicked();
+
+    void on_OnRegsiterButton_clicked();
 
 private:
     Ui::Login *ui;

@@ -2,21 +2,25 @@
 #define REGISTER_H
 
 #include <QWidget>
-
+#include "login.h"
 namespace Ui {
-class register;
+class Register;
 }
 
-class register : public QWidget
+class Register : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit register(QWidget *parent = nullptr);
-    ~register();
+    explicit Register(Login*,QWidget *parent = nullptr);
+    ~Register();
+
+private slots:
+    void on_pushButton_clicked();
 
 private:
-    Ui::register *ui;
+    Ui::Register *ui;
+    Login* login;
 };
 
 #endif // REGISTER_H

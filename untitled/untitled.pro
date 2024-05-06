@@ -17,7 +17,8 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     register.cpp \
-    user.cpp
+    user.cpp \
+    users.cpp
 
 HEADERS += \
     admin.h \
@@ -27,7 +28,8 @@ HEADERS += \
     login.h \
     mainwindow.h \
     register.h \
-    user.h
+    user.h \
+    users.h
 
 FORMS += \
     admin.ui \

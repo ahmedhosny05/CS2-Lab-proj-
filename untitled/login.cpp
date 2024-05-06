@@ -11,11 +11,14 @@
 #include "user.h"
 #include "fstream"
 #include "string"
+#include "register.h"
 using namespace std;
 Login::Login(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Login)
 {
+    loadAdminCredentialsFromFile("admin_credentials.txt");
+    loadUserCredentials("user_credentials.txt");
     ui->setupUi(this);
     ui->errorlabel->setVisible(false);
 }
@@ -27,8 +30,6 @@ Login::~Login()
 
 void Login::on_OnLoginButton_clicked()
 {
-    loadAdminCredentialsFromFile("admin_credentials");
-    loadUserCredentials("user_credentials");
     QString passwordss = ui->PasswordlineEdit->text();
     QString usernamess = ui->UsernameLineEdit->text();
     bool found = adminLogin(usernamess,passwordss);
@@ -42,7 +43,7 @@ void Login::on_OnLoginButton_clicked()
         hide();
     }
     if (founduser&&!found || found && founduser) {
-        User* user = new User();
+        User* user = new User(this);
         user->show();
         hide();
     }
@@ -50,6 +51,7 @@ void Login::on_OnLoginButton_clicked()
 
 bool Login::adminLogin(const QString& username, const QString& password)
 {
+    loadAdminCredentialsFromFile("admin_credentials.txt");
     auto it = adminCredentials.find(username);
     if (it != adminCredentials.end() && it->second == password) {
         return true;
@@ -72,7 +74,7 @@ bool Login::saveAdminCredentialsToFile(const QString& filename) {
     }
     QTextStream out(&file);
     for (const auto& pair : adminCredentials) {
-        out << pair.first << " " << pair.second;
+        out << pair.first << ' ' << pair.second << ' ';
     }
     file.close();
     return true;
@@ -86,10 +88,9 @@ bool Login::loadAdminCredentialsFromFile(const QString& filename) {
     QTextStream in(&file);
     adminCredentials.clear();
     while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList parts = line.split(" ");
+        QStringList parts = in.readLine().split(' ');
         if (parts.size() == 2) {
-            adminCredentials.insert_or_assign(parts[0], parts[1]);
+            adminCredentials.insert({parts[0], parts[1]});
         }
     }
     file.close();
@@ -103,7 +104,7 @@ bool Login::saveUserCredentials(const QString& filename) {
     }
     QTextStream out(&file);
     for (const auto& pair : userCredentials) {
-        out << pair.first << " " << pair.second;
+        out << pair.first << ' ' << pair.second << ' ';
     }
     file.close();
     return true;
@@ -117,12 +118,39 @@ bool Login::loadUserCredentials(const QString& filename) {
     QTextStream in(&file);
     userCredentials.clear();
     while (!in.atEnd()) {
-        QString line = in.readLine();
-        QStringList parts = line.split(" ");
+        QStringList parts = in.readLine().split(' ');
         if (parts.size() == 2) {
-            userCredentials.insert_or_assign(parts[0], parts[1]);
+            userCredentials.insert({parts[0], parts[1]});
         }
     }
     file.close();
     return true;
 }
+
+bool Login::saveArticlesToFile(const QString& filename) {
+    QFile file(filename);
+    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QTextStream out(&file);
+        for (const auto& article : articles) {
+            out << article.title << ' ';
+            out << article.description << ' ';
+            out << article.date << ' ';
+            out << article.rating << ' ';
+            out << article.category << ' ';
+            out << "=====";
+        }
+        file.close();
+        return true;
+    } else {
+        return false;
+    }
+}
+
+
+void Login::on_OnRegsiterButton_clicked()
+{
+    Register* reg = new Register(this);
+    reg->show();
+    hide();
+}
+
