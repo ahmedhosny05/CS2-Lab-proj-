@@ -17,8 +17,8 @@ Login::Login(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Login)
 {
-    loadAdminCredentialsFromFile("admin_credentials.txt");
-    loadUserCredentials("user_credentials.txt");
+    loadAdminCredentialsFromFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/admin_credentials.txt");
+    loadUserCredentials("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/user_credentials.txt");
     ui->setupUi(this);
     ui->errorlabel->setVisible(false);
 }
@@ -52,7 +52,7 @@ void Login::on_OnLoginButton_clicked()
 }
 bool Login::adminLogin(const QString& username, const QString& password)
 {
-    loadAdminCredentialsFromFile("admin_credentials.txt");
+    loadAdminCredentialsFromFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/admin_credentials.txt");
     auto it = adminCredentials.find(username);
     if (it != adminCredentials.end() && it->second == password) {
         return true;
@@ -60,7 +60,7 @@ bool Login::adminLogin(const QString& username, const QString& password)
     return false;
 }
 bool Login::userLogin(const QString& username, const QString& password) {
-    loadUserCredentials("user_credentials.txt");
+    loadUserCredentials("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/user_credentials.txt");
     auto it = userCredentials.find(username);
     if (it != userCredentials.end() && it->second == password) {
         return true;
@@ -69,14 +69,16 @@ bool Login::userLogin(const QString& username, const QString& password) {
         return false;
     }
 }
+
 bool Login::saveAdminCredentialsToFile(const QString& filename) {
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open file for writing."));
         return false;
     }
     QTextStream out(&file);
     for (const auto& pair : adminCredentials) {
-        out << pair.first << ' ' << pair.second << ' ';
+        out << pair.first << ' ' << pair.second << '\n';
     }
     file.close();
     return true;
@@ -85,6 +87,7 @@ bool Login::saveAdminCredentialsToFile(const QString& filename) {
 bool Login::loadAdminCredentialsFromFile(const QString& filename) {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open file for reading."));
         return false;
     }
     QTextStream in(&file);
@@ -102,11 +105,12 @@ bool Login::loadAdminCredentialsFromFile(const QString& filename) {
 bool Login::saveUserCredentials(const QString& filename) {
     QFile file(filename);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open file for writing."));
         return false;
     }
     QTextStream out(&file);
     for (const auto& pair : userCredentials) {
-        out << pair.first << ' ' << pair.second << ' ';
+        out << pair.first << ' ' << pair.second << '\n';
     }
     file.close();
     return true;
@@ -115,6 +119,7 @@ bool Login::saveUserCredentials(const QString& filename) {
 bool Login::loadUserCredentials(const QString& filename) {
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open file for reading."));
         return false;
     }
     QTextStream in(&file);
@@ -131,23 +136,22 @@ bool Login::loadUserCredentials(const QString& filename) {
 
 bool Login::saveArticlesToFile(const QString& filename) {
     QFile file(filename);
-    if (file.open(QIODevice::WriteOnly | QIODevice::Text)) {
-        QTextStream out(&file);
-        for (const auto& article : articles) {
-            out << article.title << ' ';
-            out << article.description << ' ';
-            out << article.date << ' ';
-            out << article.rating << ' ';
-            out << article.category << ' ';
-            out << "=====";
-        }
-        file.close();
-        return true;
-    } else {
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open file for writing."));
         return false;
     }
+    QTextStream out(&file);
+    for (const auto& article : articles) {
+        out << article.title << ' ';
+        out << article.description << ' ';
+        out << article.date << ' ';
+        out << article.rating << ' ';
+        out << article.category << ' ';
+        out << "=====\n";
+    }
+    file.close();
+    return true;
 }
-
 
 void Login::on_OnRegsiterButton_clicked()
 {
@@ -155,4 +159,3 @@ void Login::on_OnRegsiterButton_clicked()
     reg->show();
     hide();
 }
-

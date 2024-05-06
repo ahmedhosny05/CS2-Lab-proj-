@@ -32,7 +32,7 @@ void CreateArticle::on_CreateArticleButton_clicked()
     article.rating = Rating;
     login->articles.push_back(article);
     login->categoryMap[article.category].push_back(article);
-    if (login->saveArticlesToFile("article_credentials.txt"))
+    if (login->saveArticlesToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt"))
         ui->CreateArticleUpdate->setText("created and saved");
         ui->CreateArticleUpdate->setVisible(true);
         admin->show();

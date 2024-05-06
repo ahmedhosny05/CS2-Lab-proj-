@@ -88,7 +88,7 @@
   <widget class="QLabel" name="viewarticlesupdate">
    <property name="geometry">
     <rect>
-     <x>190</x>
+     <x>180</x>
      <y>90</y>
      <width>131</width>
      <height>101</height>
@@ -114,10 +114,10 @@
   <widget class="QLabel" name="latestarticlesupdate">
    <property name="geometry">
     <rect>
-     <x>210</x>
-     <y>160</y>
-     <width>231</width>
-     <height>181</height>
+     <x>150</x>
+     <y>120</y>
+     <width>241</width>
+     <height>201</height>
     </rect>
    </property>
    <property name="text">
