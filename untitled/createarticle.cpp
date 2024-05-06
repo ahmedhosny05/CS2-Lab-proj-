@@ -22,6 +22,7 @@ void CreateArticle::on_CreateArticleButton_clicked()
     QString Date = ui->DatelineEdit->text();
     QString Category = ui->CategorylineEdit->text();
     int Rating = ui->RatinglineEdit->text().toInt();
+    if (!Title.isEmpty() && !Description.isEmpty() && !Date.isEmpty() && !Category.isEmpty()) {
     Article article;
     article.title= Title;
     article.description = Description;
@@ -33,5 +34,6 @@ void CreateArticle::on_CreateArticleButton_clicked()
     if (login->saveArticlesToFile("article_credentials.txt"))
         ui->CreateArticleUpdate->setText("created and saved");
         ui->CreateArticleUpdate->setVisible(true);
+}
 }
 

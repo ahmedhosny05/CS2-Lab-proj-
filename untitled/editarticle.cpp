@@ -23,6 +23,7 @@ void EditArticle::on_EditArticleButton_clicked()
     QString date = ui->DatelineEdit->text();
     QString category = ui->CategorylineEdit->text();
     int rating = ui->RatinglineEdit->text().toInt();
+    if (!title.isEmpty() && !description.isEmpty() && !date.isEmpty() && !category.isEmpty()) {
     Article article ;
     article.title= title;
     article.description = description;
@@ -40,4 +41,4 @@ void EditArticle::on_EditArticleButton_clicked()
         ui->EditArticleUpdate->setVisible(true);
     }
 }
-
+}

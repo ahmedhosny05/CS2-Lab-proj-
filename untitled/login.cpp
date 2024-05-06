@@ -32,6 +32,7 @@ void Login::on_OnLoginButton_clicked()
 {
     QString passwordss = ui->PasswordlineEdit->text();
     QString usernamess = ui->UsernameLineEdit->text();
+    if (!passwordss.isEmpty() && !usernamess.isEmpty()) {
     bool found = adminLogin(usernamess,passwordss);
     bool founduser = userLogin(usernamess,passwordss);
     if (!found && !founduser) {
@@ -48,7 +49,7 @@ void Login::on_OnLoginButton_clicked()
         hide();
     }
 }
-
+}
 bool Login::adminLogin(const QString& username, const QString& password)
 {
     loadAdminCredentialsFromFile("admin_credentials.txt");
