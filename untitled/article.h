@@ -1,6 +1,6 @@
 #ifndef ARTICLE_H
 #define ARTICLE_H
-#include <qstring.h>
+#include <QString>
 class Article
 {
 public:

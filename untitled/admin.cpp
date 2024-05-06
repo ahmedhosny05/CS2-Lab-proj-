@@ -48,7 +48,7 @@ void Admin::on_DisplayAvergaeRatingButton_clicked()
 
     if (count > 0)
     {
-        ui->DisplayRatingUpdate->setText(sum/count);
+        ui->DisplayRatingUpdate->setText(QString::number(sum / count));
         ui->DisplayRatingUpdate->setVisible(true);
     }
     else
@@ -61,25 +61,27 @@ void Admin::on_DisplayAvergaeRatingButton_clicked()
 
 void Admin::on_SaveArticleButton_clicked()
 {
-    if (login->saveArticlesToFile("article_credentials.txt"))
+    if (login->saveArticlesToFile("article_credentials.txt")) {
         ui->SaveArticleUpdate->setText("saved");
         ui->SaveArticleUpdate->setVisible(true);
-    else
+    }
+else {
         ui->SaveArticleUpdate->setText("not saved error");
         ui->SaveArticleUpdate->setVisible(true);
 }
-
+}
 
 void Admin::on_SaveAdminButton_clicked()
 {
-    if (login->saveAdminCredentialsToFile("admin_credentials.txt"))
+    if (login->saveAdminCredentialsToFile("admin_credentials.txt")) {
         ui->SaveAdminUpdate->setText("saved");
         ui->SaveAdminUpdate->setVisible(true);
-    else
+    }
+else {
             ui->SaveAdminUpdate->setText("not saved error");
             ui->SaveAdminUpdate->setVisible(true);
 }
-
+}
 
 void Admin::on_CreateAndPublishNewArticle_clicked()
 {
@@ -92,9 +94,9 @@ void Admin::on_CreateAndPublishNewArticle_clicked()
 void Admin::on_AddNewCategoryButton_clicked()
 {
     QString newCategory = ui->AddCategorylineEdit->text();
-    if (login->categoryMap.find(newCategory) == login->categoryMap.end())
+if (login->categoryMap.find(newCategory) == login->categoryMap.end())
         login->categoryMap[newCategory] = vector<Article>();
-    else
+else
         ui->AddCategoryUpdate->setText("category already exists");
     login->saveArticlesToFile("article_credentials.txt");
 }

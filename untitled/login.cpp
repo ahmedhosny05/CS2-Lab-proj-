@@ -1,5 +1,10 @@
 #include "login.h"
 #include <iostream>
+#include <QMap>
+#include <map>
+#include <QFile>
+#include <QTextStream>
+#include <QMessageBox>
 #include "ui_login.h"
 #include <sstream>
 #include "Admin.h"
@@ -12,6 +17,7 @@ Login::Login(QWidget *parent)
     , ui(new Ui::Login)
 {
     ui->setupUi(this);
+    ui->errorlabel->setVisible(false);
 }
 
 Login::~Login()
@@ -60,129 +66,63 @@ bool Login::userLogin(const QString& username, const QString& password) {
     }
 }
 bool Login::saveAdminCredentialsToFile(const QString& filename) {
-    string filenameStd = filename.toStdString();
-    ofstream file(filenameStd);
-    if (file.is_open()) {
-        for (const auto& pair : adminCredentials) {
-            file << pair.first.toStdString() << " " << pair.second.toStdString() << endl;
-        }
-        file.close();
-        return true;
-    }
-    else {
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return false;
     }
+    QTextStream out(&file);
+    for (const auto& pair : adminCredentials) {
+        out << pair.first << " " << pair.second;
+    }
+    file.close();
+    return true;
 }
 
 bool Login::loadAdminCredentialsFromFile(const QString& filename) {
-    string filenameStd = filename.toStdString();
-    ifstream file(filenameStd);
-    if (file.is_open()) {
-        adminCredentials.clear();
-        string username, password;
-        while (file >> username >> password) {
-            adminCredentials.insert(make_pair(QString::fromStdString(username), QString::fromStdString(password)));
-        }
-        file.close();
-        return true;
-    }
-    else {
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         return false;
     }
-}
-
-bool Login::saveArticlesToFile(const QString& filename) {
-    string filenameStd = filename.toStdString();
-    ofstream file(filenameStd);
-    if (file.is_open()) {
-        for (const auto& article : articles) {
-            file << article.title.toStdString() << endl;
-            file << article.description.toStdString() << endl;
-            file << article.date.toStdString() << endl;
-            file << article.rating << endl;
-            file << article.category.toStdString() << endl;
-            file << "=====" << endl;
+    QTextStream in(&file);
+    adminCredentials.clear();
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(" ");
+        if (parts.size() == 2) {
+            adminCredentials.insert_or_assign(parts[0], parts[1]);
         }
-        file.close();
-        return true;
     }
-    else {
-        return false;
-    }
-}
-
-bool Login::loadArticlesFromFile(const QString& filename) {
-    string filenameStd = filename.toStdString();
-    ifstream file(filenameStd);
-    if (file.is_open()) {
-        articles.clear();
-        string line;
-        Article article;
-
-        while (getline(file, line)) {
-            if (line.empty()) {
-                continue;
-            }
-
-            if (line == "=====") {
-                articles.push_back(article);
-                article = Article();
-            }
-            else {
-                if (article.title.isEmpty()) {
-                    article.title.toStdString() = line;
-                }
-                else if (article.description.isEmpty()) {
-                    article.description.toStdString() = line;
-                }
-                else if (article.date.isEmpty()) {
-                    article.date.toStdString() = line;
-                }
-                else if (article.rating == 0) {
-                    article.rating = stoi(line);
-                }
-                else if (article.category.isEmpty()) {
-                    article.category.toStdString() = line;
-                }
-            }
-        }
-
-        file.close();
-        return true;
-    }
-    else {
-        return false;
-    }
-}
-bool Login::loadUserCredentials(const QString& filename) {
-    string filenameStd = filename.toStdString();
-    ifstream file(filenameStd);
-    if (file.is_open()) {
-        userCredentials.clear();
-        string username, password;
-        while (file >> username >> password) {
-            userCredentials.insert(make_pair(QString::fromStdString(username), QString::fromStdString(password)));
-        }
-        file.close();
-        return true;
-    }
-    else {
-        return false;
-    }
+    file.close();
+    return true;
 }
 
 bool Login::saveUserCredentials(const QString& filename) {
-    string filenameStd = filename.toStdString();
-    ifstream file(filenameStd);
-    if (file.is_open()) {
-        userCredentials.clear();
-        for (const auto& pairs : userCredentials) {
-            file << pairs.first.toStdString() << " " << pairs.second.toStdString() << endl;
-        }
-        file.close();
-        return true;
-    }
-    else {
+    QFile file(filename);
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
         return false;
     }
+    QTextStream out(&file);
+    for (const auto& pair : userCredentials) {
+        out << pair.first << " " << pair.second;
+    }
+    file.close();
+    return true;
+}
+
+bool Login::loadUserCredentials(const QString& filename) {
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        return false;
+    }
+    QTextStream in(&file);
+    userCredentials.clear();
+    while (!in.atEnd()) {
+        QString line = in.readLine();
+        QStringList parts = line.split(" ");
+        if (parts.size() == 2) {
+            userCredentials.insert_or_assign(parts[0], parts[1]);
+        }
+    }
+    file.close();
+    return true;
 }
