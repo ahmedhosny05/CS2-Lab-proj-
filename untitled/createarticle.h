@@ -3,6 +3,8 @@
 
 #include <QWidget>
 #include "login.h"
+#include "admin.h"
+
 namespace Ui {
 class CreateArticle;
 }
@@ -12,7 +14,7 @@ class CreateArticle : public QWidget
     Q_OBJECT
 
 public:
-    explicit CreateArticle(Login*, QWidget *parent = nullptr);
+    explicit CreateArticle(Admin*, Login*, QWidget *parent = nullptr);
     ~CreateArticle();
 
 private slots:
@@ -21,6 +23,7 @@ private slots:
 private:
     Ui::CreateArticle *ui;
     Login* login;
+    Admin * admin;
 };
 
 #endif // CREATEARTICLE_H

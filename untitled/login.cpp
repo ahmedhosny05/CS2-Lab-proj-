@@ -60,6 +60,7 @@ bool Login::adminLogin(const QString& username, const QString& password)
     return false;
 }
 bool Login::userLogin(const QString& username, const QString& password) {
+    loadUserCredentials("user_credentials.txt");
     auto it = userCredentials.find(username);
     if (it != userCredentials.end() && it->second == password) {
         return true;

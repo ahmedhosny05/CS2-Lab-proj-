@@ -62,3 +62,10 @@ void User::on_latestarticlesButton_clicked()
     }
 }
 
+
+void User::on_SaveButton_clicked()
+{
+    login->saveUserCredentials("user_credentials.txt");
+    login->saveArticlesToFile("article_credentials.txt");
+}
+

@@ -2,12 +2,13 @@
 #include "ui_createarticle.h"
 #include "login.h"
 #include "article.h"
-CreateArticle::CreateArticle(Login* login,QWidget *parent )
+CreateArticle::CreateArticle(Admin* admin, Login* login,QWidget *parent )
     : QWidget(parent)
     , ui(new Ui::CreateArticle)
 {
     ui->setupUi(this);
     this->login=login;
+    this->admin = admin;
 }
 
 CreateArticle::~CreateArticle()
@@ -34,6 +35,8 @@ void CreateArticle::on_CreateArticleButton_clicked()
     if (login->saveArticlesToFile("article_credentials.txt"))
         ui->CreateArticleUpdate->setText("created and saved");
         ui->CreateArticleUpdate->setVisible(true);
+        admin->show();
+        hide();
 }
 }
 

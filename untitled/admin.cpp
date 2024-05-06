@@ -85,7 +85,7 @@ else {
 
 void Admin::on_CreateAndPublishNewArticle_clicked()
 {
-    CreateArticle* create = new CreateArticle(login);
+    CreateArticle* create = new CreateArticle(this,login);
     create->show();
     hide();
 }

@@ -22,6 +22,8 @@ private slots:
 
     void on_latestarticlesButton_clicked();
 
+    void on_SaveButton_clicked();
+
 private:
     Ui::User *ui;
     Login* login;
