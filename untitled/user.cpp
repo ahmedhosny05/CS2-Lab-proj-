@@ -75,8 +75,8 @@ void User::on_latestarticlesButton_clicked()
 
 void User::on_SaveButton_clicked()
 {
-    login->saveUserCredentials("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/user_credentials.txt");
-    login->saveArticlesToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt");
+    login->saveUserCredentials("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/user_credentials.txt");
+    login->saveArticlesToFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/article_credentials.txt");
 }
 
 

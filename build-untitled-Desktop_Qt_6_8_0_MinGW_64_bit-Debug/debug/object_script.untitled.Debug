@@ -1,0 +1,17 @@
+debug/admin.o
+debug/article.o
+debug/createarticle.o
+debug/editarticle.o
+debug/login.o
+debug/main.o
+debug/mainwindow.o
+debug/register.o
+debug/user.o
+debug/users.o
+debug/moc_admin.o
+debug/moc_createarticle.o
+debug/moc_editarticle.o
+debug/moc_login.o
+debug/moc_mainwindow.o
+debug/moc_register.o
+debug/moc_user.o
