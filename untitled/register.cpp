@@ -27,6 +27,7 @@ void Register::on_pushButton_clicked()
                 login->adminCredentials[username] = password;
                 Admin* admin = new Admin(login);
                 admin->show();
+                login->saveAdminCredentialsToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/admin_credentials.txt");
                 hide();
             }
         }
@@ -37,6 +38,7 @@ void Register::on_pushButton_clicked()
                 login->users.push_back(newUser);
                 User* user = new User(login);
                 user->show();
+                login->saveUserCredentials("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/user_credentials.txt");
                 hide();
             }
 

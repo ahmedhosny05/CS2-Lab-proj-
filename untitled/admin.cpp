@@ -23,7 +23,7 @@ void Admin::on_DeleteArticle_clicked()
     int index = ui->DeleteArticlelineEdit->text().toInt();
     if (index >= 0 && index < login->articles.size()) {
         login->articles.erase(login->articles.begin() + index);
-        login->saveArticlesToFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/article_credentials.txt");
+        login->saveArticlesToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt");
         deleted = "deleted";
     }
     ui->DeleteArticleUpdate->setText(deleted);
@@ -61,7 +61,7 @@ void Admin::on_DisplayAvergaeRatingButton_clicked()
 
 void Admin::on_SaveArticleButton_clicked()
 {
-    if (login->saveArticlesToFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/article_credentials.txt")) {
+    if (login->saveArticlesToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt")) {
         ui->SaveArticleUpdate->setText("saved");
         ui->SaveArticleUpdate->setVisible(true);
     }
@@ -73,7 +73,7 @@ else {
 
 void Admin::on_SaveAdminButton_clicked()
 {
-    if (login->saveAdminCredentialsToFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/admin_credentials.txt")) {
+    if (login->saveAdminCredentialsToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/admin_credentials.txt")) {
         ui->SaveAdminUpdate->setText("saved");
         ui->SaveAdminUpdate->setVisible(true);
     }
@@ -98,7 +98,7 @@ if (login->categoryMap.find(newCategory) == login->categoryMap.end())
         login->categoryMap[newCategory] = vector<Article>();
 else
         ui->AddCategoryUpdate->setText("category already exists");
-    login->saveArticlesToFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/article_credentials.txt");
+    login->saveArticlesToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt");
 }
 
 

@@ -32,7 +32,7 @@ void EditArticle::on_EditArticleButton_clicked()
     article.rating= rating;
     if (index >= 0 && index < login->articles.size()) {
         login->articles[index] = article;
-        login->saveArticlesToFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/article_credentials.txt");
+        login->saveArticlesToFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt");
         ui->EditArticleUpdate->setText("edited and saved");
         ui->EditArticleUpdate->setVisible(true);
     }

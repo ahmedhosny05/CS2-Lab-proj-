@@ -17,8 +17,9 @@ Login::Login(QWidget *parent)
     : QWidget(parent)
     , ui(new Ui::Login)
 {
-    loadAdminCredentialsFromFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/admin_credentials.txt");
-    loadUserCredentials("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/user_credentials.txt");
+    loadAdminCredentialsFromFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/admin_credentials.txt");
+    loadUserCredentials("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/user_credentials.txt");
+    loadArticlesFromFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/article_credentials.txt");
     ui->setupUi(this);
     ui->errorlabel->setVisible(false);
 }
@@ -52,7 +53,7 @@ void Login::on_OnLoginButton_clicked()
 }
 bool Login::adminLogin(const QString& username, const QString& password)
 {
-    loadAdminCredentialsFromFile("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/admin_credentials.txt");
+    loadAdminCredentialsFromFile("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/admin_credentials.txt");
     auto it = adminCredentials.find(username);
     if (it != adminCredentials.end() && it->second == password) {
         return true;
@@ -60,7 +61,7 @@ bool Login::adminLogin(const QString& username, const QString& password)
     return false;
 }
 bool Login::userLogin(const QString& username, const QString& password) {
-    loadUserCredentials("C:/Users/dell/Desktop/csss 2/CS2-Lab-proj-/untitled/user_credentials.txt");
+    loadUserCredentials("/Users/daliakadry/Documents/cs2/CS2-Lab-proj-/untitled/user_credentials.txt");
     auto it = userCredentials.find(username);
     if (it != userCredentials.end() && it->second == password) {
         return true;
@@ -142,13 +143,14 @@ bool Login::saveArticlesToFile(const QString& filename) {
     }
     QTextStream out(&file);
     for (const auto& article : articles) {
-        out << article.title << ' ';
-        out << article.description << ' ';
-        out << article.date << ' ';
-        out << article.rating << ' ';
-        out << article.category << ' ';
+        out << article.title << '\n';
+        out << article.description << '\n';
+        out << article.date << '\n';
+        out << article.category << '\n';
+        out << article.rating << '\n';
         out << "=====\n";
     }
+
     file.close();
     return true;
 }
@@ -159,3 +161,49 @@ void Login::on_OnRegsiterButton_clicked()
     reg->show();
     hide();
 }
+bool Login::loadArticlesFromFile(const QString& filename) {
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        QMessageBox::warning(this, tr("Error"), tr("Cannot open file for reading."));
+        return false;
+    }
+
+    QTextStream in(&file);
+    articles.clear();
+    Article article;
+
+    while (!in.atEnd()) {
+        QString line = in.readLine().trimmed();
+
+        if (line.isEmpty()) {
+            continue;
+        }
+
+        if (line == "=====") {
+            articles.push_back(article);
+            article = Article();
+        }
+        else {
+            if (article.title.isEmpty()) {
+                article.title = line;
+            }
+            else if (article.description.isEmpty()) {
+                article.description = line;
+            }
+            else if (article.date.isEmpty()) {
+                article.date = line;
+            }
+            else if (article.rating == 0) {
+                article.rating = line.toInt();
+            }
+            else if (article.category.isEmpty()) {
+                article.category = line;
+            }
+
+        }
+    }
+
+    file.close();
+    return true;
+}
+

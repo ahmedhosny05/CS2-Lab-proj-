@@ -20,7 +20,7 @@ public:
 private slots:
     void on_SearchButton_clicked();
 
-    void on_ViewArticlesButton_clicked();
+
 
     void on_latestarticlesButton_clicked();
 
@@ -28,7 +28,6 @@ private slots:
 
     void on_RateButton_clicked();
     vector<Article>::iterator findArticleByTitle(const QString& title);
-
 private:
     Ui::User *ui;
     Login* login;
