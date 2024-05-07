@@ -25,37 +25,41 @@ User::~User()
 
 void User::on_SearchButton_clicked()
 {
-    if(!ui->SearchlineEdit->text().isEmpty()) {
-        QString keyword = ui->SearchlineEdit->text();
-        for (const auto& article : login->articles) {
-            if (article.title.contains(keyword, Qt::CaseInsensitive) ||
-                article.description.contains(keyword, Qt::CaseInsensitive) ||
-                article.category.contains(keyword, Qt::CaseInsensitive)) {
-                QString search =  "Title " + article.title + " description " + article.description + " category " + article.category;
-                ui->SearchUpdate->setText(search);
-            }
-            else {
-                ui->SearchUpdate->setText("not found");
-            }
+    QString keyword = ui->SearchlineEdit->text();
+    QString searchResult;
+    bool found = false;
+
+    for (const auto& article : login->articles) {
+        QString articleEntry = article.title + " " + article.description + " " + article.category;
+        if (articleEntry.contains(keyword, Qt::CaseInsensitive)) {
+            searchResult += "Title: " + article.title + "\nDescription: " + article.description + "\nCategory: " + article.category + "\n\n";
+            found = true;
+        }
+    }
+
+    if (found) {
+        ui->SearchUpdate->setText(searchResult);
+    } else {
+        ui->SearchUpdate->setText("No articles found.");
     }
 }
-}
+
 
 void User::on_ViewArticlesButton_clicked()
 {
-    if (!ui->ViewArticleslineEdit->text().isEmpty()) {
-        QString category = ui->ViewArticleslineEdit->text();
-        if (login->categoryMap.find(category) != login->categoryMap.end()) {
-            for (const auto& article : login->categoryMap[category]) {
-                QString search =  "Title " + article.title + " description " + article.description + " category " + article.category + " Date " + article.date + " Rating " + QString::number(article.rating);
-                ui->viewarticlesupdate->setText(search);
-            }
-    }
-        else {
-            ui->viewarticlesupdate->setText("not found");
+    QString category = ui->ViewArticleslineEdit->text();
+    QString categoryArticles;
+    auto it = login->categoryMap.find(category);
+    if (it != login->categoryMap.end()) {
+        for (const auto& article : it->second) {
+            categoryArticles += "Title: " + article.title + "\nDescription: " + article.description + "\nCategory: " + article.category + "\n\n";
         }
+        ui->viewarticlesupdate->setText(categoryArticles);
+    } else {
+        ui->viewarticlesupdate->setText("No articles found in this category.");
     }
 }
+
 
 
 void User::on_latestarticlesButton_clicked()
@@ -67,7 +71,6 @@ void User::on_latestarticlesButton_clicked()
                               "Description: " + login->articles[i].description + "\n\n";
         latestArticles += articleInfo;
     }
-    ui->latestarticlesupdate->setVisible(true);
     ui->latestarticlesupdate->setText(latestArticles);
 }
 
